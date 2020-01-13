@@ -1,0 +1,36 @@
+version: "3.7"
+services:
+        bancovisitas:
+                image: mysql:5.7
+                container_name: bancovisitas
+                environment:
+                        MYSQL_ROOT_PASSWORD: root
+                        MYSQL_DATABASE: visitantes
+                        MYSQL_USER: cadastrar
+                        MYSQL_PASSWORD: rr 
+                ports:
+                        - "3306:3306"
+        registrosvisitas:
+                depends_on:
+                        - bancovisitas
+                links:
+                        - bancovisitas:bancovisitas
+                build: 
+                        context: .
+                        dockerfile: Dockerfile 
+                container_name: registrovisitas
+                ports:
+                        - "80:80"
+                volumes:
+                        - ./registros_portaria_web_simples/:/var/www/html
+        phpmyadmin:
+                image: phpmyadmin/phpmyadmin:latest
+                depends_on:
+                        - bancovisitas
+                links:
+                        - bancovisitas:bancovisitas
+                ports:
+                        - "81:80"
+                environment:
+                        MYSQL_ROOT_PASSWORD: root
+
