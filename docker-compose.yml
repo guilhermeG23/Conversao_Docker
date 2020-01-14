@@ -1,20 +1,27 @@
 version: "3.7"
 services:
-        bancovisitas:
+        bancogeral:
                 image: mysql:5.7
-                container_name: bancovisitas
+                container_name: bancogeral
                 environment:
                         MYSQL_ROOT_PASSWORD: root
-                        MYSQL_DATABASE: visitantes
-                        MYSQL_USER: cadastrar
-                        MYSQL_PASSWORD: rr 
                 ports:
                         - "3306:3306"
+        phpmyadmin:
+                image: phpmyadmin/phpmyadmin:latest
+                depends_on:
+                        - bancogeral
+                links:
+                        - bancogeral:bancogeral
+                ports:
+                        - "443:80"
+                environment:
+                        - PMA_ARBITRARY=1
         registrosvisitas:
                 depends_on:
-                        - bancovisitas
+                        - bancogeral
                 links:
-                        - bancovisitas:bancovisitas
+                        - bancogeral:bancogeral
                 build: 
                         context: .
                         dockerfile: Dockerfile 
@@ -22,15 +29,31 @@ services:
                 ports:
                         - "80:80"
                 volumes:
-                        - ./registros_portaria_web_simples/:/var/www/html
-        phpmyadmin:
-                image: phpmyadmin/phpmyadmin:latest
+                        - ./registrovisitas/:/var/www/html
+        registrosfuncionarios:
                 depends_on:
-                        - bancovisitas
+                        - bancogeral
                 links:
-                        - bancovisitas:bancovisitas
+                        - bancogeral:bancogeral
+                build: 
+                        context: .
+                        dockerfile: Dockerfile 
+                container_name: registrofuncionarios
                 ports:
                         - "81:80"
-                environment:
-                        MYSQL_ROOT_PASSWORD: root
+                volumes:
+                        - ./registrofuncionarios/:/var/www/html
+        registrosfotos:
+                depends_on:
+                        - bancogeral
+                links:
+                        - bancogeral:bancogeral
+                build: 
+                        context: .
+                        dockerfile: Dockerfile 
+                container_name: registrofotos
+                ports:
+                        - "82:80"
+                volumes:
+                        - ./registrofotos/:/var/www/html
 
