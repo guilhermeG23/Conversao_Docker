@@ -1,0 +1,4 @@
+FROM php:7.2-apache
+RUN docker-php-ext-install mysqli 
+RUN apt update && apt install git -y 
+RUN git clone https://github.com/guilhermeG23/nova_Agenda && rm -rf /var/www/html/index.html && mv nova_Agenda/* /var/www/html/ && rm -rf nova_Agenda

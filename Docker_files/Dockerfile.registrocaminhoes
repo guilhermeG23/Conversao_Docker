@@ -1,0 +1,7 @@
+FROM php:7.2-apache
+RUN apt update && apt install git -y && apt install libpng-dev -y && apt install libjpeg-dev -y && apt install libjpeg-turbo-progs -y && apt install libfreetype6-dev -y && apt install libjpeg62 -y && apt install apt-utils -y && apt install imagemagick -y
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+RUN docker-php-ext-install -j$(nproc) gd
+RUN docker-php-ext-install exif
+RUN docker-php-ext-install mysqli
+RUN git clone https://github.com/guilhermeG23/Novo_Registro_Fotos && rm -rf /var/www/html/index.html && mv Novo_Registro_Fotos/* /var/www/html/ && rm -rf Novo_Registro_Fotos

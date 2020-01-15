@@ -1,7 +1,0 @@
-FROM debian:latest
-
-RUN apt update && apt install git -y && apt install php7.3 -y && apt install php-mysql -y && apt install apache2 -y && apt install libapache2-mod-php7.3
-
-RUN /etc/init.d/apache2 start
-
-RUN git clone https://github.com/guilhermeG23/nova_Agenda && rm -rf /var/www/html/index.html && mv nova_Agenda/* /var/www/html/ && rm -rf nova_Agenda

@@ -7,6 +7,8 @@ services:
                         MYSQL_ROOT_PASSWORD: root
                 ports:
                         - "3306:3306"
+                volumes:
+                        - ./SQL/:/var/lib/mysql
         phpmyadmin:
                 image: phpmyadmin/phpmyadmin:latest
                 depends_on:
@@ -17,43 +19,36 @@ services:
                         - "443:80"
                 environment:
                         - PMA_ARBITRARY=1
-        registrosvisitas:
+        registrovisitas:
                 depends_on:
                         - bancogeral
                 links:
                         - bancogeral:bancogeral
                 build: 
                         context: .
-                        dockerfile: Dockerfile 
+                        dockerfile: ./Docker_files/Dockerfile.registrovisitas
                 container_name: registrovisitas
                 ports:
                         - "80:80"
-                volumes:
-                        - ./registrovisitas/:/var/www/html
-        registrosfuncionarios:
+        registrofuncionarios:
                 depends_on:
                         - bancogeral
                 links:
                         - bancogeral:bancogeral
                 build: 
                         context: .
-                        dockerfile: Dockerfile 
+                        dockerfile: ./Docker_files/Dockerfile.registrofuncionarios
                 container_name: registrofuncionarios
                 ports:
                         - "81:80"
-                volumes:
-                        - ./registrofuncionarios/:/var/www/html
-        registrosfotos:
+        registrocaminhoes:
                 depends_on:
                         - bancogeral
                 links:
                         - bancogeral:bancogeral
                 build: 
                         context: .
-                        dockerfile: Dockerfile 
-                container_name: registrofotos
+                        dockerfile: ./Docker_files/Dockerfile.registrocaminhoes
+                container_name: registrocaminhoes
                 ports:
                         - "82:80"
-                volumes:
-                        - ./registrofotos/:/var/www/html
-
